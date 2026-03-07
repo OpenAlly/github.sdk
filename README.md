@@ -38,15 +38,62 @@ $ npm i @openally/github.sdk
 $ yarn add @openally/github.sdk
 ```
 
-## 📚 Usage
+## 👀 Usage
 
 ```ts
-// TBC
+import {
+  repos,
+  users
+} from "@openally/github.sdk";
+
+// Iterate over all pull requests (pagination handled automatically)
+for await (const pr of repos.OpenAlly["github.sdk"].pulls().iterate()) {
+  console.log(pr.title);
+}
+
+// Fetch all tags at once
+const tags = await repos.OpenAlly["github.sdk"].tags().all();
+
+// List all repos for a user
+const userRepos = await users.torvalds.repos().all();
+
+// Iterate over workflow runs for a specific workflow
+for await (const run of repos.nodejs.node.workflowRuns("ci.yml").iterate()) {
+  console.log(run.id, run.status);
+}
 ```
 
-## API
+Each method returns an `ApiEndpoint<T>` instance with:
+- `.setBearerToken(token)` — attach a GitHub personal access token
+- `.setAgent(userAgent)` — override the default `User-Agent` header
+- `.iterate()` — `AsyncIterableIterator<T>` that handles pagination transparently
+- `.all()` — `Promise<T[]>` collecting all pages
 
-TBC
+## 📚 API
+
+### `repos[owner][repo]`
+
+| Method | GitHub Documentation |
+|---|---|
+| `.tags()` | [List repository tags](https://docs.github.com/en/rest/repos/repos#list-repository-tags) |
+| `.pulls()` | [List pull requests](https://docs.github.com/en/rest/pulls/pulls#list-pull-requests) |
+| `.issues()` | [List repository issues](https://docs.github.com/en/rest/issues/issues#list-repository-issues) |
+| `.commits()` | [List commits](https://docs.github.com/en/rest/commits/commits#list-commits) |
+| `.workflows()` | [List repository workflows](https://docs.github.com/en/rest/actions/workflows#list-repository-workflows) |
+| `.workflowRuns(workflowId)` | [List workflow runs for a workflow](https://docs.github.com/en/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow) |
+| `.runJobs(runId)` | [List jobs for a workflow run](https://docs.github.com/en/rest/actions/workflow-jobs#list-jobs-for-a-workflow-run) |
+| `.runArtifacts(runId)` | [List workflow run artifacts](https://docs.github.com/en/rest/actions/artifacts#list-workflow-run-artifacts) |
+
+### `users[username]`
+
+| Method | GitHub Documentation |
+|---|---|
+| `.orgs()` | [List organizations for a user](https://docs.github.com/en/rest/orgs/orgs#list-organizations-for-a-user) |
+| `.repos()` | [List repositories for a user](https://docs.github.com/en/rest/repos/repos#list-repositories-for-a-user) |
+| `.gists()` | [List gists for a user](https://docs.github.com/en/rest/gists/gists#list-gists-for-a-user) |
+| `.followers()` | [List followers of a user](https://docs.github.com/en/rest/users/followers#list-followers-of-a-user) |
+| `.following()` | [List the people a user follows](https://docs.github.com/en/rest/users/followers#list-the-people-a-user-follows) |
+| `.starred()` | [List repositories starred by a user](https://docs.github.com/en/rest/activity/starring#list-repositories-starred-by-a-user) |
 
 ## Contributors ✨
 

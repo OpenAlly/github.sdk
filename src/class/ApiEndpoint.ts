@@ -1,13 +1,27 @@
 // Import Internal Dependencies
-import * as utils from "../utils/index.ts";
+import { HttpLinkParser } from "./HttpLinkParser.ts";
 
 // CONSTANTS
 const kGithubURL = new URL("https://api.github.com/");
 
-/**
- * @see https://github.com/dashlog/fetch-github-repositories/blob/master/src/api.ts#L66
- * @see https://github.com/fraxken/dep-updater/blob/master/src/githubActions.ts#L97C53-L97C66
- */
+export class ApiEndpointOptions<T> {
+  /**
+   * By default, the raw response from the GitHub API is returned as-is.
+   * You can provide a custom extractor function to transform the raw response
+   * into an array of type T.
+   */
+  extractor?: (raw: any) => T[];
+  /**
+   * A personal access token is required to access private resources,
+   * and to increase the rate limit for unauthenticated requests.
+   */
+  token?: string;
+  /**
+   * @default "@openally/github.sdk/1.0.0"
+   * @see https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api?apiVersion=2022-11-28#user-agent
+   */
+  userAgent?: string;
+}
 
 export class ApiEndpoint<T> {
   #userAgent: string;
@@ -15,12 +29,22 @@ export class ApiEndpoint<T> {
 
   #nextURL: string | null = null;
   #apiEndpoint: string | URL;
+  #extractor: (raw: any) => T[];
 
   constructor(
-    apiEndpoint: string | URL
+    apiEndpoint: string | URL,
+    options: ApiEndpointOptions<T> = {}
   ) {
-    this.#userAgent = "@openally/github.sdk/1.0.0";
+    const {
+      userAgent = "@openally/github.sdk/1.0.0",
+      token,
+      extractor = ((raw) => raw as T[])
+    } = options;
+
+    this.#userAgent = userAgent;
+    this.#bearerToken = token;
     this.#apiEndpoint = apiEndpoint;
+    this.#extractor = extractor;
   }
 
   setBearerToken(
@@ -57,12 +81,14 @@ export class ApiEndpoint<T> {
       url,
       { headers }
     );
-    const data = await response.json() as T[];
+    const rawData = await response.json();
 
     const linkHeader = response.headers.get("link");
-    this.#nextURL = utils.getNextPageURL(linkHeader);
+    this.#nextURL = linkHeader
+      ? HttpLinkParser.parse(linkHeader).get("next") ?? null
+      : null;
 
-    return data;
+    return this.#extractor(rawData);
   }
 
   async* iterate(): AsyncIterableIterator<T> {
@@ -74,6 +100,6 @@ export class ApiEndpoint<T> {
   }
 
   all(): Promise<T[]> {
-    return utils.fromAsync(this.iterate());
+    return Array.fromAsync(this.iterate());
   }
 }

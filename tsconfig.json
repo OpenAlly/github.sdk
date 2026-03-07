@@ -2,7 +2,9 @@
   "extends": "@openally/config.typescript/esm-ts-next",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "types": ["node"],
+    "lib": ["ES2022", "ES2023", "ES2024", "ESNext"],
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
