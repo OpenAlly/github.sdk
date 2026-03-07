@@ -41,7 +41,8 @@
     "@openally/config.typescript": "^1.2.1",
     "@types/node": "25.3.1",
     "c8": "^11.0.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "undici": "7.22.0"
   },
   "dependencies": {
     "@octokit/types": "16.0.0"
