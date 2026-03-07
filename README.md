@@ -47,7 +47,7 @@ const github = new GithubClient({
   token: process.env.GITHUB_TOKEN
 });
 
-for await (const pr of github.repos.nodejs.node.pulls().iterate()) {
+for await (const pr of github.repos.nodejs.node.pulls()) {
   console.log(pr.title);
 }
 

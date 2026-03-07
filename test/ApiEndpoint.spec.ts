@@ -184,6 +184,50 @@ describe("ApiEndpoint", () => {
     });
   });
 
+  describe("Symbol.asyncIterator", () => {
+    it("should yield items one at a time", async() => {
+      mockAgent
+        .get(kGithubOrigin)
+        .intercept({ path: "/users/foo/repos", method: "GET" })
+        .reply(200, JSON.stringify([{ id: 1 }, { id: 2 }]), {
+          headers: { "content-type": "application/json" }
+        });
+
+      const items: unknown[] = [];
+      for await (const item of new ApiEndpoint("/users/foo/repos")) {
+        items.push(item);
+      }
+
+      assert.deepEqual(items, [{ id: 1 }, { id: 2 }]);
+    });
+
+    it("should yield items across paginated pages", async() => {
+      const pool = mockAgent.get(kGithubOrigin);
+
+      pool
+        .intercept({ path: "/users/foo/repos", method: "GET" })
+        .reply(200, JSON.stringify([{ id: 1 }]), {
+          headers: {
+            "content-type": "application/json",
+            link: '<https://api.github.com/users/foo/repos?page=2>; rel="next"'
+          }
+        });
+
+      pool
+        .intercept({ path: "/users/foo/repos?page=2", method: "GET" })
+        .reply(200, JSON.stringify([{ id: 2 }, { id: 3 }]), {
+          headers: { "content-type": "application/json" }
+        });
+
+      const items: unknown[] = [];
+      for await (const item of new ApiEndpoint("/users/foo/repos")) {
+        items.push(item);
+      }
+
+      assert.deepEqual(items, [{ id: 1 }, { id: 2 }, { id: 3 }]);
+    });
+  });
+
   describe("headers", () => {
     it("should send the default User-Agent header", async() => {
       mockAgent
@@ -257,10 +301,12 @@ describe("ApiEndpoint", () => {
 
   describe("extractor", () => {
     it("should apply the extractor to transform the raw response", async() => {
+      const workflows = [{ id: 10 }, { id: 20 }];
+
       mockAgent
         .get(kGithubOrigin)
         .intercept({ path: "/repos/foo/bar/actions/workflows", method: "GET" })
-        .reply(200, JSON.stringify({ total_count: 2, workflows: [{ id: 10 }, { id: 20 }] }), {
+        .reply(200, JSON.stringify({ total_count: 2, workflows }), {
           headers: { "content-type": "application/json" }
         });
 
@@ -269,7 +315,7 @@ describe("ApiEndpoint", () => {
         { extractor: (raw) => raw.workflows }
       ).all();
 
-      assert.deepEqual(result, [{ id: 10 }, { id: 20 }]);
+      assert.deepEqual(result, workflows);
     });
 
     it("should apply the extractor on every page when paginating", async() => {

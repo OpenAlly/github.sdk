@@ -107,9 +107,15 @@ describe("GithubClient", () => {
     it("should return ApiEndpoints for repo sub-resources", () => {
       const client = new GithubClient();
 
-      assert.ok(client.repos.owner.myrepo.tags() instanceof ApiEndpoint);
-      assert.ok(client.repos.owner.myrepo.pulls() instanceof ApiEndpoint);
-      assert.ok(client.repos.owner.myrepo.workflows() instanceof ApiEndpoint);
+      assert.ok(
+        client.repos.owner.myrepo.tags() instanceof ApiEndpoint
+      );
+      assert.ok(
+        client.repos.owner.myrepo.pulls() instanceof ApiEndpoint
+      );
+      assert.ok(
+        client.repos.owner.myrepo.workflows() instanceof ApiEndpoint
+      );
     });
 
     it("should use the configured token when fetching repo data", async() => {
@@ -126,7 +132,9 @@ describe("GithubClient", () => {
           headers: { "content-type": "application/json" }
         });
 
-      const result = await client.repos.octocat["hello-world"].tags().all();
+      const result = await client.repos.octocat["hello-world"]
+        .tags()
+        .all();
 
       assert.deepEqual(result, [{ name: "v1.0.0" }]);
     });
@@ -145,22 +153,33 @@ describe("GithubClient", () => {
           headers: { "content-type": "application/json" }
         });
 
-      await assert.doesNotReject(client.repos.octocat["hello-world"].tags().all());
+      await assert.doesNotReject(
+        client.repos.octocat["hello-world"].tags().all()
+      );
     });
 
     it("should fetch workflows with the envelope extractor", async() => {
       const client = new GithubClient();
+      const workflows = [{ id: 7, name: "CI" }];
 
       mockAgent
         .get(kGithubOrigin)
-        .intercept({ path: "/repos/octocat/hello-world/actions/workflows", method: "GET" })
-        .reply(200, JSON.stringify({ total_count: 1, workflows: [{ id: 7, name: "CI" }] }), {
+        .intercept({
+          path: "/repos/octocat/hello-world/actions/workflows",
+          method: "GET"
+        })
+        .reply(200, JSON.stringify({ total_count: 1, workflows }), {
           headers: { "content-type": "application/json" }
         });
 
-      const result = await client.repos.octocat["hello-world"].workflows().all();
+      const result = await client.repos.octocat["hello-world"]
+        .workflows()
+        .all();
 
-      assert.deepEqual(result, [{ id: 7, name: "CI" }]);
+      assert.deepEqual(
+        result,
+        workflows
+      );
     });
   });
 });

@@ -99,6 +99,10 @@ export class ApiEndpoint<T> {
     } while (this.#nextURL !== null);
   }
 
+  [Symbol.asyncIterator](): AsyncIterableIterator<T> {
+    return this.iterate();
+  }
+
   all(): Promise<T[]> {
     return Array.fromAsync(this.iterate());
   }
