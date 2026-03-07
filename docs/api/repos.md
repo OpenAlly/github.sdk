@@ -6,20 +6,20 @@ The `repos` proxy provides access to GitHub repository endpoints.
 import { repos } from "@openally/github.sdk";
 
 // Collect all tags
-const tags = await repos.OpenAlly["github.sdk"].tags().all();
+const tags = await repos.OpenAlly["github.sdk"].tags();
 
 // Stream pull requests page by page
-for await (const pr of repos.nodejs.node.pulls().iterate()) {
+for await (const pr of repos.nodejs.node.pulls()) {
   console.log(pr.number, pr.title);
 }
 
 // Stream workflow runs for a specific workflow file
-for await (const run of repos.nodejs.node.workflowRuns("ci.yml").iterate()) {
+for await (const run of repos.nodejs.node.workflowRuns("ci.yml")) {
   console.log(run.id, run.status);
 }
 
 // Collect all jobs for a specific run
-const jobs = await repos.nodejs.node.runJobs(12345678).all();
+const jobs = await repos.nodejs.node.runJobs(12345678);
 ```
 
 ## Access pattern

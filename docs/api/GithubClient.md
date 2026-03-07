@@ -11,15 +11,15 @@ const github = new GithubClient({
 });
 
 // Iterate over all open pull requests
-for await (const pr of github.repos.OpenAlly["github.sdk"].pulls().iterate()) {
+for await (const pr of github.repos.OpenAlly["github.sdk"].pulls()) {
   console.log(pr.title);
 }
 
 // Collect all tags at once
-const tags = await github.repos.OpenAlly["github.sdk"].tags().all();
+const tags = await github.repos.OpenAlly["github.sdk"].tags();
 
 // List all repositories for a user
-const userRepos = await github.users.torvalds.repos().all();
+const userRepos = await github.users.torvalds.repos();
 ```
 
 ## Constructor

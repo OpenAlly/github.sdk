@@ -6,15 +6,15 @@ The `users` proxy provides access to GitHub user endpoints.
 import { users } from "@openally/github.sdk";
 
 // Collect all repositories for a user
-const repos = await users.torvalds.repos().all();
+const repos = await users.torvalds.repos();
 
 // Stream followers one by one
-for await (const follower of users.torvalds.followers().iterate()) {
+for await (const follower of users.torvalds.followers()) {
   console.log(follower.login);
 }
 
 // Collect all starred repositories
-const starred = await users.torvalds.starred().all();
+const starred = await users.torvalds.starred();
 ```
 
 ## Access pattern

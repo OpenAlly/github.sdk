@@ -51,9 +51,9 @@ for await (const pr of github.repos.nodejs.node.pulls()) {
   console.log(pr.title);
 }
 
-const tags = await github.repos.OpenAlly["github.sdk"].tags().all();
+const tags = await github.repos.OpenAlly["github.sdk"].tags();
 
-const userRepos = await github.users.torvalds.repos().all();
+const userRepos = await github.users.torvalds.repos();
 ```
 
 ## 📚 API

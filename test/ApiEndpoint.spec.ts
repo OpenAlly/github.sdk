@@ -140,6 +140,21 @@ describe("ApiEndpoint", () => {
     });
   });
 
+  describe("all() with thenable", () => {
+    it("should fetch a single page and return all items", async() => {
+      mockAgent
+        .get(kGithubOrigin)
+        .intercept({ path: "/users/foo/repos", method: "GET" })
+        .reply(200, JSON.stringify([{ id: 1 }, { id: 2 }]), {
+          headers: { "content-type": "application/json" }
+        });
+
+      const result = await new ApiEndpoint("/users/foo/repos");
+
+      assert.deepEqual(result, [{ id: 1 }, { id: 2 }]);
+    });
+  });
+
   describe("iterate()", () => {
     it("should yield items one at a time", async() => {
       mockAgent
