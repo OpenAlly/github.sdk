@@ -46,24 +46,38 @@ function createRepoProxy(
     commits: () => new ApiEndpoint<Commit>(`/repos/${owner}/${repo}/commits`, config),
     workflows: () => new ApiEndpoint<Workflow>(
       `/repos/${owner}/${repo}/actions/workflows`,
-      { ...config, extractor: (raw: WorkflowsResponse) => raw.workflows }
+      {
+        ...config,
+        extractor: (raw: WorkflowsResponse) => raw.workflows
+      }
     ),
     workflowRuns: (workflowId: string | number) => new ApiEndpoint<WorkflowRun>(
       `/repos/${owner}/${repo}/actions/workflows/${workflowId}/runs`,
-      { ...config, extractor: (raw: WorkflowRunsResponse) => raw.workflow_runs }
+      {
+        ...config,
+        extractor: (raw: WorkflowRunsResponse) => raw.workflow_runs
+      }
     ),
     runJobs: (runId: number) => new ApiEndpoint<Job>(
       `/repos/${owner}/${repo}/actions/runs/${runId}/jobs`,
-      { ...config, extractor: (raw: JobsResponse) => raw.jobs }
+      {
+        ...config,
+        extractor: (raw: JobsResponse) => raw.jobs
+      }
     ),
     runArtifacts: (runId: number) => new ApiEndpoint<Artifact>(
       `/repos/${owner}/${repo}/actions/runs/${runId}/artifacts`,
-      { ...config, extractor: (raw: ArtifactsResponse) => raw.artifacts }
+      {
+        ...config,
+        extractor: (raw: ArtifactsResponse) => raw.artifacts
+      }
     )
   };
 }
 
-export function createReposProxy(config: RequestConfig = {}): ReposProxy {
+export function createReposProxy(
+  config: RequestConfig = {}
+): ReposProxy {
   return createApiProxy(
     (owner) => createApiProxy(
       (repo) => createRepoProxy(owner, repo, config)

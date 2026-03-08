@@ -99,7 +99,18 @@ export class ApiEndpoint<T> {
     } while (this.#nextURL !== null);
   }
 
+  [Symbol.asyncIterator](): AsyncIterableIterator<T> {
+    return this.iterate();
+  }
+
   all(): Promise<T[]> {
     return Array.fromAsync(this.iterate());
+  }
+
+  then<TResult1 = T[], TResult2 = never>(
+    onfulfilled?: ((value: T[]) => TResult1 | PromiseLike<TResult1>) | null,
+    onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null
+  ): Promise<TResult1 | TResult2> {
+    return this.all().then(onfulfilled, onrejected);
   }
 }

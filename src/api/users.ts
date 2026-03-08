@@ -32,16 +32,20 @@ export type UsersProxy = {
 function createUserProxy(
   username: string,
   config: RequestConfig = {}
-): UserEndpointMethods {
+) {
   return Object.fromEntries(
-    (Object.keys(kUserEndpointResponseMap) as UserEndpoint[]).map(
+    Object.keys(kUserEndpointResponseMap).map(
       (endpoint) => [endpoint, () => new ApiEndpoint(`/users/${username}/${endpoint}`, config)]
     )
-  ) as UserEndpointMethods;
+  );
 }
 
-export function createUsersProxy(config: RequestConfig = {}): UsersProxy {
-  return createApiProxy((username) => createUserProxy(username, config)) as UsersProxy;
+export function createUsersProxy(
+  config: RequestConfig = {}
+): UsersProxy {
+  return createApiProxy(
+    (username) => createUserProxy(username, config)
+  ) as UsersProxy;
 }
 
 export const users = createUsersProxy();

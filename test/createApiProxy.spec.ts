@@ -8,7 +8,7 @@ import { createApiProxy } from "../src/class/createApiProxy.ts";
 
 describe("createApiProxy", () => {
   it("should call the factory with the accessed property key", () => {
-    const proxy = createApiProxy((key: string) => key.toUpperCase());
+    const proxy = createApiProxy((key) => key.toUpperCase());
 
     assert.equal(proxy.hello, "HELLO");
     assert.equal(proxy.world, "WORLD");
@@ -16,7 +16,7 @@ describe("createApiProxy", () => {
 
   it("should call the factory on each property access", () => {
     let callCount = 0;
-    const proxy = createApiProxy((key: string) => {
+    const proxy = createApiProxy((key) => {
       callCount++;
 
       return key;
@@ -30,7 +30,7 @@ describe("createApiProxy", () => {
   });
 
   it("should return different values for different keys", () => {
-    const proxy = createApiProxy((key: string) => {
+    const proxy = createApiProxy((key) => {
       return { name: key };
     });
 
@@ -51,7 +51,7 @@ describe("createApiProxy", () => {
   });
 
   it("should return a plain object (no prototype)", () => {
-    const proxy = createApiProxy((key: string) => key);
+    const proxy = createApiProxy((key) => key);
 
     assert.equal(Object.getPrototypeOf(proxy), null);
   });
