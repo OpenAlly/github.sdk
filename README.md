@@ -61,10 +61,11 @@ const userRepos = await github.users.torvalds.repos();
 - [ApiEndpoint](./docs/api/ApiEndpoint.md)
 - [GithubClient](./docs/api/GithubClient.md)
 
-Available GitHub APIs: 
+Available GitHub APIs:
 
 - [repos](./docs/api/repos.md)
 - [users](./docs/api/users.md)
+- [fetchRawFile](./docs/api/fetchRawFile.md)
 
 ---
 

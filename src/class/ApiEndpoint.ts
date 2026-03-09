@@ -1,26 +1,18 @@
 // Import Internal Dependencies
 import { HttpLinkParser } from "./HttpLinkParser.ts";
+import {
+  DEFAULT_USER_AGENT,
+  GITHUB_API
+} from "../constants.ts";
+import type { RequestConfig } from "../types.ts";
 
-// CONSTANTS
-const kGithubURL = new URL("https://api.github.com/");
-
-export class ApiEndpointOptions<T> {
+export interface ApiEndpointOptions<T> extends RequestConfig {
   /**
    * By default, the raw response from the GitHub API is returned as-is.
    * You can provide a custom extractor function to transform the raw response
    * into an array of type T.
    */
   extractor?: (raw: any) => T[];
-  /**
-   * A personal access token is required to access private resources,
-   * and to increase the rate limit for unauthenticated requests.
-   */
-  token?: string;
-  /**
-   * @default "@openally/github.sdk/1.0.0"
-   * @see https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api?apiVersion=2022-11-28#user-agent
-   */
-  userAgent?: string;
 }
 
 export class ApiEndpoint<T> {
@@ -36,7 +28,7 @@ export class ApiEndpoint<T> {
     options: ApiEndpointOptions<T> = {}
   ) {
     const {
-      userAgent = "@openally/github.sdk/1.0.0",
+      userAgent = DEFAULT_USER_AGENT,
       token,
       extractor = ((raw) => raw as T[])
     } = options;
@@ -75,8 +67,8 @@ export class ApiEndpoint<T> {
     };
 
     const url = this.#nextURL === null ?
-      new URL(this.#apiEndpoint, kGithubURL) :
-      new URL(this.#nextURL, kGithubURL);
+      new URL(this.#apiEndpoint, GITHUB_API) :
+      new URL(this.#nextURL, GITHUB_API);
     const response = await fetch(
       url,
       { headers }
