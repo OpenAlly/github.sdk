@@ -2,7 +2,15 @@
 import type { Endpoints } from "@octokit/types";
 
 export interface RequestConfig {
+  /**
+   * A personal access token is required to access private resources,
+   * and to increase the rate limit for unauthenticated requests.
+   */
   token?: string;
+  /**
+   * @default "@openally/github.sdk/1.0.0"
+   * @see https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api?apiVersion=2022-11-28#user-agent
+   */
   userAgent?: string;
 }
 
