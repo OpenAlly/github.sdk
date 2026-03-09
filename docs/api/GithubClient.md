@@ -48,3 +48,8 @@ interface GithubClientOptions {
 
 - **`repos`** — `ReposProxy` — see [repos](./repos.md)
 - **`users`** — `UsersProxy` — see [users](./users.md)
+
+## Methods
+
+- **`fetchRawFile`** — `Promise<string>` when no `parser` is provided, `Promise<T>` when `parser: "json"` or a custom parser function is provided.
+ — see [fetchRawFile](./fetchRawFile.md)
