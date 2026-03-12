@@ -17,6 +17,16 @@
         "test",
         "security"
       ]
+    },
+    {
+      "login": "clemgbld",
+      "name": "Clement Gombauld",
+      "avatar_url": "https://avatars.githubusercontent.com/u/91478082?v=4",
+      "profile": "https://blog-clement-gombauld.vercel.app/",
+      "contributions": [
+        "doc",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
