@@ -8,6 +8,9 @@ import { repos } from "@openally/github.sdk";
 // Collect all tags
 const tags = await repos.OpenAlly["github.sdk"].tags();
 
+// Collect all contributors
+const contributors = await repos.OpenAlly["github.sdk"].contributors();
+
 // Stream pull requests page by page
 for await (const pr of repos.nodejs.node.pulls()) {
   console.log(pr.number, pr.title);
@@ -63,6 +66,14 @@ Returns `ApiEndpoint<Commit>`.
 Lists commits.
 
 > GitHub docs: [List commits](https://docs.github.com/en/rest/commits/commits#list-commits)
+
+### `.contributors()`
+
+Returns `ApiEndpoint<Contributor>`.
+
+Lists contributors to the repository, sorted by number of commits.
+
+> GitHub docs: [List repository contributors](https://docs.github.com/en/rest/repos/repos#list-repository-contributors)
 
 ### `.workflows()`
 
