@@ -37,6 +37,7 @@ describe("Repos API", () => {
       assert.ok(methods.pulls() instanceof ApiEndpoint);
       assert.ok(methods.issues() instanceof ApiEndpoint);
       assert.ok(methods.commits() instanceof ApiEndpoint);
+      assert.ok(methods.contributors() instanceof ApiEndpoint);
       assert.ok(methods.workflows() instanceof ApiEndpoint);
     });
 
@@ -126,6 +127,19 @@ describe("Repos API", () => {
       const result = await repos.octocat["hello-world"].issues().all();
 
       assert.deepEqual(result, [{ number: 5, title: "Bug report" }]);
+    });
+
+    it("should fetch contributors for a repo", async() => {
+      mockAgent
+        .get(kGithubOrigin)
+        .intercept({ path: "/repos/octocat/hello-world/contributors", method: "GET" })
+        .reply(200, JSON.stringify([{ login: "octocat", contributions: 42 }]), {
+          headers: { "content-type": "application/json" }
+        });
+
+      const result = await repos.octocat["hello-world"].contributors().all();
+
+      assert.deepEqual(result, [{ login: "octocat", contributions: 42 }]);
     });
 
     it("should fetch commits for a repo", async() => {

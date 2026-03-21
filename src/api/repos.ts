@@ -6,6 +6,7 @@ import type {
   PullRequest,
   Issue,
   Commit,
+  Contributor,
   Workflow,
   WorkflowRun,
   Job,
@@ -22,6 +23,7 @@ type RepoEndpointMethods = {
   pulls: () => ApiEndpoint<PullRequest>;
   issues: () => ApiEndpoint<Issue>;
   commits: () => ApiEndpoint<Commit>;
+  contributors: () => ApiEndpoint<Contributor>;
   workflows: () => ApiEndpoint<Workflow>;
   workflowRuns: (workflowId: string | number) => ApiEndpoint<WorkflowRun>;
   runJobs: (runId: number) => ApiEndpoint<Job>;
@@ -44,6 +46,7 @@ function createRepoProxy(
     pulls: () => new ApiEndpoint<PullRequest>(`/repos/${owner}/${repo}/pulls`, config),
     issues: () => new ApiEndpoint<Issue>(`/repos/${owner}/${repo}/issues`, config),
     commits: () => new ApiEndpoint<Commit>(`/repos/${owner}/${repo}/commits`, config),
+    contributors: () => new ApiEndpoint<Contributor>(`/repos/${owner}/${repo}/contributors`, config),
     workflows: () => new ApiEndpoint<Workflow>(
       `/repos/${owner}/${repo}/actions/workflows`,
       {

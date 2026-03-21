@@ -19,6 +19,7 @@ export type Tag = Endpoints["GET /repos/{owner}/{repo}/tags"]["response"]["data"
 export type PullRequest = Endpoints["GET /repos/{owner}/{repo}/pulls"]["response"]["data"][number];
 export type Issue = Endpoints["GET /repos/{owner}/{repo}/issues"]["response"]["data"][number];
 export type Commit = Endpoints["GET /repos/{owner}/{repo}/commits"]["response"]["data"][number];
+export type Contributor = Endpoints["GET /repos/{owner}/{repo}/contributors"]["response"]["data"][number];
 export type Workflow = Endpoints["GET /repos/{owner}/{repo}/actions/workflows"]["response"]["data"]["workflows"][number];
 export type WorkflowRun = Endpoints[
   "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs"
