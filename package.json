@@ -42,10 +42,10 @@
   "devDependencies": {
     "@openally/config.eslint": "^2.2.0",
     "@openally/config.typescript": "^1.2.1",
-    "@types/node": "25.5.2",
+    "@types/node": "25.9.1",
     "c8": "^11.0.0",
     "typescript": "^6.0.2",
-    "undici": "8.0.2"
+    "undici": "8.3.0"
   },
   "dependencies": {
     "@octokit/types": "16.0.0"
