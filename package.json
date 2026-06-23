@@ -45,7 +45,7 @@
     "@types/node": "25.5.2",
     "c8": "^11.0.0",
     "typescript": "^6.0.2",
-    "undici": "8.0.2"
+    "undici": "8.5.0"
   },
   "dependencies": {
     "@octokit/types": "16.0.0"
