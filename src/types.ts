@@ -44,3 +44,5 @@ export type UserGist = Endpoints["GET /users/{username}/gists"]["response"]["dat
 export type UserFollower = Endpoints["GET /users/{username}/followers"]["response"]["data"][number];
 export type UserFollowing = Endpoints["GET /users/{username}/following"]["response"]["data"][number];
 export type UserStarred = Endpoints["GET /users/{username}/starred"]["response"]["data"][number];
+
+export type { Endpoints };
