@@ -5,5 +5,4 @@ export {
   type FetchRawFileOptions
 } from "./api/rawFile.ts";
 export * from "./class/GithubClient.ts";
-export type { RequestConfig } from "./types.ts";
-
+export * from "./types.ts";
